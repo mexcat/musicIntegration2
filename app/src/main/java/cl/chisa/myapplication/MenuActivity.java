@@ -2,6 +2,7 @@ package cl.chisa.myapplication;
 
 import android.Manifest;
 import android.app.Application;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -40,6 +41,9 @@ public class MenuActivity extends DBConnection {
         rol = getIntent().getParcelableExtra("rol");
         estado = getIntent().getParcelableExtra("estado");
 
+        persona.setRol(rol);
+        persona.setEstado(estado);
+
         String[] strings = new String[2];
         strings[0] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
         strings[1] = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -54,7 +58,9 @@ public class MenuActivity extends DBConnection {
         btn_actividades.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                Intent i = new Intent(getApplicationContext(), ActividadesActivity.class);
+                i.putExtra("persona", persona);
+                startActivity(i);
             }
         });
         btn_mis_datos.setOnClickListener(new View.OnClickListener(){
@@ -73,17 +79,17 @@ public class MenuActivity extends DBConnection {
         Log.e("rol??", rol.getId().toString());
         switch (rol.getId()) {
             case 0:
-                btn_actividades.setVisibility(View.VISIBLE);
-                btn_sedes.setVisibility(View.VISIBLE);
-                btn_asignaturas.setVisibility(View.VISIBLE);
-                btn_personas.setVisibility(View.VISIBLE);
-                btn_mis_datos.setVisibility(View.VISIBLE);
-                break;
-            case 1:
                 btn_actividades.setVisibility(View.GONE);
                 btn_sedes.setVisibility(View.VISIBLE);
                 btn_asignaturas.setVisibility(View.VISIBLE);
                 btn_personas.setVisibility(View.GONE);
+                btn_mis_datos.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                btn_actividades.setVisibility(View.VISIBLE);
+                btn_sedes.setVisibility(View.VISIBLE);
+                btn_asignaturas.setVisibility(View.VISIBLE);
+                btn_personas.setVisibility(View.VISIBLE);
                 btn_mis_datos.setVisibility(View.VISIBLE);
                 break;
             case 2:

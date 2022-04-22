@@ -78,6 +78,39 @@ public class PersonaSql extends DBConnection {
         return lista;
     }
 
+    public List<Persona> callAllProfesor() {
+        List<Persona> lista = null;
+        Persona persona = new Persona();
+        Estado estado = new Estado();
+        Rol rol = new Rol();
+        try {
+            Connection ConnexionMySQL = CONN();
+            Statement st = ConnexionMySQL.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * from persona where id_rol = ");
+            while (rs.next()) {
+                persona.setDesc_nombre(rs.getString("desc_nombre"));
+                persona.setDesc_paterno(rs.getString("desc_paterno"));
+                persona.setDesc_materno(rs.getString("desc_materno"));
+                persona.setRut_persona(rs.getString("rut_persona"));
+                persona.setDesc_email(rs.getString("desc_email"));
+                persona.setPassword("");
+                rol.setId(rs.getInt("id_rol"));
+                rol.setDesc_rol(rs.getString("desc_rol"));
+                persona.setRol(rol);
+                estado.setId(rs.getInt("id_estado"));
+                estado.setDesc_estado("desc_estado");
+                persona.setEstado(estado);
+                lista.add(persona);
+            }
+            rs.close();
+            ConnexionMySQL.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
     public Persona updatePersona(Persona persona) {
         Estado estado = new Estado();
         Rol rol = new Rol();
