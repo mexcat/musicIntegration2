@@ -2,6 +2,7 @@ package cl.chisa.myapplication;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -253,7 +254,11 @@ public class ActividadesActivity extends DBConnection {
                     ActividadSql actividad = new ActividadSql();
                     actividad.addActividad(actividadAEnviar);
                     Toast.makeText(context,"Datos guardados", Toast.LENGTH_LONG).show();
-                    limpiar();
+//                    limpiar();
+
+                    Intent i = new Intent(context, ActividadesActivity.class);
+                    startActivity(i);
+
                 }else{
                     Toast.makeText(context,"Revise los datos ingresados", Toast.LENGTH_LONG).show();
                 }
@@ -337,8 +342,10 @@ public class ActividadesActivity extends DBConnection {
                 ){
                     ActividadSql actividad = new ActividadSql();
                     actividad.updateActividad(actividadAEnviar);
+//                    limpiar();
                     Toast.makeText(context,"Datos actualizados", Toast.LENGTH_LONG).show();
-                    limpiar();
+                    Intent i = new Intent(context, ActividadesActivity.class);
+                    startActivity(i);
                 }else{
                     Toast.makeText(context,"Revise los datos ingresados", Toast.LENGTH_LONG).show();
                 }
