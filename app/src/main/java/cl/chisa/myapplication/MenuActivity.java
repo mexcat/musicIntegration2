@@ -90,7 +90,7 @@ public class MenuActivity extends DBConnection {
                         case 2:
                             info = consulta.exportAllToExcel();
                             break;
-                        case 3:
+                        case 4:
                             info = consulta.exportDocenteToExcel(String.valueOf(persona.getRut_persona()));
                     }
                         String[] headers = new String[]{
