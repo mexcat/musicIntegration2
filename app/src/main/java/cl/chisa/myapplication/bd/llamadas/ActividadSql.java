@@ -109,7 +109,7 @@ public class ActividadSql extends DBConnection {
             Connection ConnexionMySQL = CONN();
             Statement st = ConnexionMySQL.createStatement();
             try {
-                st.executeUpdate("UPDATE actividades SET  asignatura_id ="+ actividad.getAsignatura_id_asignatura() +", sede_id =" + actividad.getSede_id_sede() + ", fecha_registro = Date_Format(now(),'%m/%d/%Y'), fecha_actividad = STR_TO_DATE('"+actividad.getFecha_actividad()+"', '%e/%c/%Y'), horaini_actividad='"+ actividad.getHoraini_actividad() +"',horafin_actividad='" + actividad.getHorafin_actividad() + "' where persona_rut_persona = '" + actividad.getPersona_rut_persona() + "'");
+                st.executeUpdate("UPDATE actividades SET  asignatura_id ="+ actividad.getAsignatura_id_asignatura() +", sede_id =" + actividad.getSede_id_sede() + ", fecha_registro = Date_Format(now(),'%m/%d/%Y'), fecha_actividad = STR_TO_DATE('"+actividad.getFecha_actividad()+"', '%e/%c/%Y'), horaini_actividad='"+ actividad.getHoraini_actividad() +"',horafin_actividad='" + actividad.getHorafin_actividad() + "' where id = '" + actividad.getId() + "'");
             }catch (SQLException e){
                 Log.e("error", e.toString());
             }

@@ -253,7 +253,7 @@ public class ActividadesActivity extends DBConnection {
                     ActividadSql actividad = new ActividadSql();
                     actividad.addActividad(actividadAEnviar);
                     Toast.makeText(context,"Datos guardados", Toast.LENGTH_LONG).show();
-
+                    limpiar();
                 }else{
                     Toast.makeText(context,"Revise los datos ingresados", Toast.LENGTH_LONG).show();
                 }
@@ -338,12 +338,20 @@ public class ActividadesActivity extends DBConnection {
                     ActividadSql actividad = new ActividadSql();
                     actividad.updateActividad(actividadAEnviar);
                     Toast.makeText(context,"Datos actualizados", Toast.LENGTH_LONG).show();
-
+                    limpiar();
                 }else{
                     Toast.makeText(context,"Revise los datos ingresados", Toast.LENGTH_LONG).show();
                 }
 
             });
         }
+    }
+    public void limpiar(){
+        tv_fecha.setText("Fehca actividad");
+        tv_hora_inicio.setText("Hora inicio");
+        tv_hora_termino.setText("Hora termino");
+        sp_docentes.setSelection(0);
+        sp_sede.setSelection(0);
+        sp_materia.setSelection(0);
     }
 }
