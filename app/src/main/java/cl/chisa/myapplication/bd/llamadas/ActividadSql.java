@@ -108,8 +108,16 @@ public class ActividadSql extends DBConnection {
         try {
             Connection ConnexionMySQL = CONN();
             Statement st = ConnexionMySQL.createStatement();
+            Log.e("actividad.getFecha_actividad()",actividad.getFecha_actividad());
+            String fechaFinal = "";
+            if (actividad.getFecha_actividad().contains("-")){
+                String[] tempString = actividad.getFecha_actividad().split("-");
+                fechaFinal = tempString[2]+"/"+tempString[1]+"/"+tempString[0];
+            }else{
+                fechaFinal = actividad.getFecha_actividad();
+            }
             try {
-                st.executeUpdate("UPDATE actividades SET  asignatura_id ="+ actividad.getAsignatura_id_asignatura() +", sede_id =" + actividad.getSede_id_sede() + ", fecha_registro = Date_Format(now(),'%m/%d/%Y'), fecha_actividad = STR_TO_DATE('"+actividad.getFecha_actividad()+"', '%e/%c/%Y'), horaini_actividad='"+ actividad.getHoraini_actividad() +"',horafin_actividad='" + actividad.getHorafin_actividad() + "' where id = '" + actividad.getId() + "'");
+                st.executeUpdate("UPDATE actividades SET  asignatura_id ="+ actividad.getAsignatura_id_asignatura() +", sede_id =" + actividad.getSede_id_sede() + ", fecha_registro = Date_Format(now(),'%m/%d/%Y'), fecha_actividad = STR_TO_DATE('"+fechaFinal+"', '%e/%c/%Y'), horaini_actividad='"+ actividad.getHoraini_actividad() +"',horafin_actividad='" + actividad.getHorafin_actividad() + "' where id = '" + actividad.getId() + "'");
             }catch (SQLException e){
                 Log.e("error", e.toString());
             }

@@ -354,7 +354,7 @@ public class ActividadesActivity extends DBConnection {
         }
     }
     public void limpiar(){
-        tv_fecha.setText("Fehca actividad");
+        tv_fecha.setText("Fecha actividad");
         tv_hora_inicio.setText("Hora inicio");
         tv_hora_termino.setText("Hora termino");
         sp_docentes.setSelection(0);

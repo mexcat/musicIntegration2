@@ -10,6 +10,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Font;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -78,7 +79,10 @@ public class ToExcel {
         Date date = new Date();
         SimpleDateFormat getFecha = new SimpleDateFormat("ddMMyyyy");
         String fecha = getFecha.format(date);
-
+        File fileN = new File(dir+"/","RegistroDocente_"+fecha+".xls");
+        if(!fileN.exists()){ // Si no existe, crea el archivo.
+            fileN.createNewFile();
+        }
         FileOutputStream file = new FileOutputStream( dir+"/RegistroDocente_"+fecha+".xls");
         workbook.write(file);
         file.close();
