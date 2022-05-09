@@ -30,13 +30,8 @@ public class ConsultasSql extends DBConnection {
                 persona.setDesc_materno(rs.getString("desc_materno"));
                 persona.setRut_persona(rs.getString("rut_persona"));
                 persona.setDesc_email(rs.getString("desc_email"));
+                persona.setRol_id(rs.getInt("id_rol"));
                 persona.setPassword("");
-
-                //persona.setRol_id(rs.getInt("rol_id"));
-                Log.e("id_rol_out", String.valueOf(rs.getInt("id_rol")));
-                Log.e("id_rol_in", String.valueOf(rol.getId()));
-
-                persona.setEstado_id(rs.getInt("estado_id"));
 
             }
             rs.close();

@@ -57,6 +57,8 @@ public class MenuActivity extends DBConnection {
             );
         }
 
+
+
         btn_actividades.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -94,7 +96,7 @@ public class MenuActivity extends DBConnection {
                         String[] headers = new String[]{
                             "Fecha", "Rut", "Docente", "Sede", "Asignatura", "Inicio", "Termino", "Horas"
                     };
-                    ToExcel.writeExcel(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString(), headers, info );
+                    ToExcel.writeExcel(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString(), headers, info, MenuActivity.this );
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

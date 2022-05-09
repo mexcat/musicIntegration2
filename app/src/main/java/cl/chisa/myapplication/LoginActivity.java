@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cl.chisa.myapplication.bd.DBConnection;
 import cl.chisa.myapplication.bd.clases.Persona;
@@ -48,6 +49,8 @@ public class LoginActivity extends DBConnection {
                                     Intent i = new Intent(getApplicationContext(), MenuActivity.class);
                                     i.putExtra("persona", mResult);
 ;                                   startActivity(i);
+                                }else{
+                                        Toast.makeText(LoginActivity.this, "Error usuario/contraseña. Intente nuevamente",Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

@@ -1,5 +1,8 @@
 package cl.chisa.myapplication.bd.utilidades;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -9,7 +12,9 @@ import org.apache.poi.ss.usermodel.Font;
 
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -18,7 +23,7 @@ import cl.chisa.myapplication.bd.clases.Excel;
 public class ToExcel {
 
 //    public static void writeExcel(String dir, String[] cabeceras, List<Object> data) throws Exception {
-    public static void writeExcel(String dir, String[] cabeceras, Vector<Excel> data) throws Exception {
+    public static void writeExcel(String dir, String[] cabeceras, Vector<Excel> data, Context contexto) throws Exception {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet();
         workbook.setSheetName(0, "Hoja excel");
@@ -70,8 +75,13 @@ public class ToExcel {
         //total.setCellStyle(style);
         total.setCellFormula(String.format("SUM(B2:B%d)", 1 + data.size()));
 
-        FileOutputStream file = new FileOutputStream( dir+"/data.xls");
+        Date date = new Date();
+        SimpleDateFormat getFecha = new SimpleDateFormat("ddMMyyyy");
+        String fecha = getFecha.format(date);
+
+        FileOutputStream file = new FileOutputStream( dir+"/RegistroDocente_"+fecha+".xls");
         workbook.write(file);
         file.close();
+        Toast.makeText(contexto, "Archivo creado en "+dir+"/RegistroDocente_"+fecha+".xls",Toast.LENGTH_LONG).show();
     }
 }
