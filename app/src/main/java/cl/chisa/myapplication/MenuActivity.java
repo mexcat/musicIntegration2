@@ -13,19 +13,23 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.List;
+import java.util.Vector;
 
 import cl.chisa.myapplication.bd.DBConnection;
 import cl.chisa.myapplication.bd.clases.Estado;
+import cl.chisa.myapplication.bd.clases.Excel;
 import cl.chisa.myapplication.bd.clases.Persona;
 import cl.chisa.myapplication.bd.clases.Rol;
+import cl.chisa.myapplication.bd.clases.Sede;
 import cl.chisa.myapplication.bd.llamadas.ConsultasSql;
 import cl.chisa.myapplication.bd.llamadas.RolSql;
+import cl.chisa.myapplication.bd.llamadas.SedeSql;
 import cl.chisa.myapplication.bd.utilidades.ToExcel;
 
 public class MenuActivity extends DBConnection {
     Persona persona;
     Application app;
-    Button btn_actividades, btn_sedes, btn_asignaturas, btn_personas, btn_mis_datos, btn_salir;
+    Button btn_actividades, btn_sedes, btn_asignaturas, btn_personas, btn_mis_datos, btn_salir, btn_exportar;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,7 @@ public class MenuActivity extends DBConnection {
         btn_personas = findViewById(R.id.btn_personas);
         btn_mis_datos = findViewById(R.id.btn_mis_datos);
         btn_salir = findViewById(R.id.btn_salir);
+        btn_exportar = findViewById(R.id.btn_exportar);
 
         app = (Application) getApplicationContext();
         persona = getIntent().getParcelableExtra("persona");
@@ -71,6 +76,31 @@ public class MenuActivity extends DBConnection {
             }
         });
 
+        btn_exportar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                try {
+                    Vector<Excel> info = new Vector();
+                    ConsultasSql consulta = new ConsultasSql();
+
+                    switch (persona.getRol_id()) {
+                        case 1:
+                        case 2:
+                            info = consulta.exportAllToExcel();
+                            break;
+                        case 3:
+                            info = consulta.exportDocenteToExcel(String.valueOf(persona.getRut_persona()));
+                    }
+                        String[] headers = new String[]{
+                            "Fecha", "Rut", "Docente", "Sede", "Asignatura", "Inicio", "Termino", "Horas"
+                    };
+                    ToExcel.writeExcel(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString(), headers, info );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         btn_salir.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -79,27 +109,39 @@ public class MenuActivity extends DBConnection {
             }
         });
 
+
         switch (persona.getRol_id()) {
-            case 0:
-                btn_actividades.setVisibility(View.GONE);
-                btn_sedes.setVisibility(View.VISIBLE);
-                btn_asignaturas.setVisibility(View.VISIBLE);
-                btn_personas.setVisibility(View.GONE);
-                btn_mis_datos.setVisibility(View.VISIBLE);
-                break;
             case 1:
                 btn_actividades.setVisibility(View.VISIBLE);
                 btn_sedes.setVisibility(View.VISIBLE);
                 btn_asignaturas.setVisibility(View.VISIBLE);
                 btn_personas.setVisibility(View.VISIBLE);
                 btn_mis_datos.setVisibility(View.VISIBLE);
+                btn_exportar.setVisibility(View.VISIBLE);
                 break;
             case 2:
+                btn_actividades.setVisibility(View.VISIBLE);
+                btn_sedes.setVisibility(View.GONE);
+                btn_asignaturas.setVisibility(View.GONE);
+                btn_personas.setVisibility(View.GONE);
+                btn_mis_datos.setVisibility(View.GONE);
+                btn_exportar.setVisibility(View.VISIBLE);
+                break;
+            case 3:
                 btn_actividades.setVisibility(View.GONE);
                 btn_sedes.setVisibility(View.GONE);
                 btn_asignaturas.setVisibility(View.GONE);
                 btn_personas.setVisibility(View.GONE);
                 btn_mis_datos.setVisibility(View.GONE);
+                btn_exportar.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                btn_actividades.setVisibility(View.VISIBLE);
+                btn_sedes.setVisibility(View.GONE);
+                btn_asignaturas.setVisibility(View.GONE);
+                btn_personas.setVisibility(View.GONE);
+                btn_mis_datos.setVisibility(View.GONE);
+                btn_exportar.setVisibility(View.VISIBLE);
                 break;
 
         }

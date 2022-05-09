@@ -6,6 +6,19 @@
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/btn_exportar"
+        style="@style/Botones"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="64dp"
+        android:text="Exportar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_mis_datos" />
+
+    <Button
         android:id="@+id/btn_actividades"
         style="@style/Botones"
         android:layout_width="0dp"
@@ -24,7 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
         android:text="SEDES"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
         android:text="ASIGNATURAS"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +63,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
         android:text="PERSONAS"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +76,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
         android:text="MIS DATOS"
         app:layout_constraintEnd_toEndOf="parent"

@@ -204,26 +204,6 @@ public class ActividadesActivity extends DBConnection {
                         lastSelectedMinute2 = minute;
                         tv_hora_termino.setText(hourOfDay + ":" + minute );
                         actividadAEnviar.setHorafin_actividad(hourOfDay + ":" + minute );
-                        /*view.setOnTimeChangedListener((view1, hourOfDay1, minute1) -> {
-                            boolean validTime;
-                            if(hourOfDay < minHour) {
-                                validTime = false;
-                            }
-                            else if(hourOfDay == minHour) {
-                                validTime = minute >= minMinute;
-                            }
-                            else {
-                                validTime = true;
-                            }
-                            if(validTime) {
-                                currentHour = hourOfDay;
-                                currentMinute = minute;
-                                tv_hora_termino.setText(hourOfDay + ":" + minute );
-                            }
-                            else {
-                                //tv_hora_inicio.setText(hourOfDay + ":" + minute );
-                            }
-                        });*/
                     }
                 };
 

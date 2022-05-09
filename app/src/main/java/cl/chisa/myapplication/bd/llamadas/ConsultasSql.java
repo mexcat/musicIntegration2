@@ -5,9 +5,12 @@ import android.util.Log;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Vector;
 
 import cl.chisa.myapplication.bd.DBConnection;
+import cl.chisa.myapplication.bd.clases.ActividadConDetalle;
 import cl.chisa.myapplication.bd.clases.Estado;
+import cl.chisa.myapplication.bd.clases.Excel;
 import cl.chisa.myapplication.bd.clases.Persona;
 import cl.chisa.myapplication.bd.clases.Rol;
 
@@ -45,4 +48,63 @@ public class ConsultasSql extends DBConnection {
 
         return persona;
     }
+
+    public Vector<Excel> exportAllToExcel() {
+        Vector<Excel> listaExcel = new Vector<>();
+        try {
+            Connection ConnexionMySQL = CONN();
+            Statement st = ConnexionMySQL.createStatement();
+            ResultSet rs = st.executeQuery("select a.fecha_actividad as Fecha, p.rut_persona as Rut, CONCAT_WS(' ',p.desc_nombre,p.desc_paterno,p.desc_materno) as Docente, s.desc_sede as Sede, asi.desc_asignatura as Asignatura, a.horaini_actividad as Inicio, a.horafin_actividad as Termino, a.horafin_actividad - a.horaini_actividad as Horas from appfund.actividades a join appfund.persona p on p.rut_persona = a.persona_rut_persona join appfund.sede s on s.id = a.sede_id join appfund.asignatura asi on asi.id = a.asignatura_id");
+            while (rs.next()) {
+                Excel actividad = new Excel();
+
+                actividad.setFecha(rs.getString("Fecha"));
+                actividad.setRut(rs.getString("Rut"));
+                actividad.setDocente(rs.getString("Docente"));
+                actividad.setSede(rs.getString("Sede"));
+                actividad.setAsignatura(rs.getString("Asignatura"));
+                actividad.setInicio(rs.getString("Inicio"));
+                actividad.setTermino(rs.getString("Termino"));
+                actividad.setHoras(rs.getString("Horas"));
+
+                listaExcel.add(actividad);
+            }
+            rs.close();
+            ConnexionMySQL.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaExcel;
+    }
+    public Vector<Excel> exportDocenteToExcel(String rut) {
+        Vector<Excel> listaExcel = new Vector<>();
+        try {
+            Connection ConnexionMySQL = CONN();
+            Statement st = ConnexionMySQL.createStatement();
+            ResultSet rs = st.executeQuery("select a.fecha_actividad as Fecha, p.rut_persona as Rut, CONCAT_WS(' ',p.desc_nombre,p.desc_paterno,p.desc_materno) as Docente, s.desc_sede as Sede, asi.desc_asignatura as Asignatura, a.horaini_actividad as Inicio, a.horafin_actividad as Termino, a.horafin_actividad - a.horaini_actividad as Horas from appfund.actividades a join appfund.persona p on p.rut_persona = a.persona_rut_persona join appfund.sede s on s.id = a.sede_id join appfund.asignatura asi on asi.id = a.asignatura_id where p.rut_persona='"+String.valueOf(rut)+"'");
+            while (rs.next()) {
+                Excel actividad = new Excel();
+
+                actividad.setFecha(rs.getString("Fecha"));
+                actividad.setRut(rs.getString("Rut"));
+                actividad.setDocente(rs.getString("Docente"));
+                actividad.setSede(rs.getString("Sede"));
+                actividad.setAsignatura(rs.getString("Asignatura"));
+                actividad.setInicio(rs.getString("Inicio"));
+                actividad.setTermino(rs.getString("Termino"));
+                actividad.setHoras(rs.getString("Horas"));
+
+                listaExcel.add(actividad);
+            }
+            rs.close();
+            ConnexionMySQL.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaExcel;
+    }
+
+
 }

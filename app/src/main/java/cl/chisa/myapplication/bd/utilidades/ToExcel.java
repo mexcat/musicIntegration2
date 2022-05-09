@@ -11,30 +11,17 @@ import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
+
+import cl.chisa.myapplication.bd.clases.Excel;
 
 public class ToExcel {
 
-    private static List<Object> DATA;
-
-    static {
-        DATA = Arrays.asList(new Object[] {
-                new Object[] { "PlayStation 4 (PS4) - Consola 500GB", new BigDecimal("340.95"), "https://www.amazon.es/PlayStation-4-PS4-Consola-500GB/dp/B013U9CW8A" },
-                new Object[] { "Raspberry Pi 3 Modelo B (1,2 GHz Quad-core ARM Cortex-A53, 1GB RAM, USB 2.0)", new BigDecimal("41.95"), "https://www.amazon.es/Raspberry-Modelo-GHz-Quad-core-Cortex-A53/dp/B01CD5VC92/" },
-                new Object[] { "Gigabyte Brix - Barebón (Intel, Core i5, 2,6 GHz, 6, 35 cm (2.5\"), Serial ATA III, SO-DIMM) Negro ", new BigDecimal("421.36"), "https://www.amazon.es/Gigabyte-Brix-Bareb%C3%B3n-Serial-SO-DIMM/dp/B00HFCTUPM/" }
-        });
-    }
-
-
-    public static void writeExcel(String dir, String[] cabeceras, List<Object> data) throws Exception {
+//    public static void writeExcel(String dir, String[] cabeceras, List<Object> data) throws Exception {
+    public static void writeExcel(String dir, String[] cabeceras, Vector<Excel> data) throws Exception {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet();
         workbook.setSheetName(0, "Hoja excel");
-
-        String[] headers = new String[]{
-                "Producto",
-                "Precio",
-                "Enlace"
-        };
 
        // CellStyle headerStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
@@ -46,31 +33,42 @@ public class ToExcel {
         //style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         HSSFRow headerRow = sheet.createRow(0);
-        for (int i = 0; i < headers.length; ++i) {
-            String header = headers[i];
+        for (int i = 0; i < cabeceras.length; ++i) {
+            String header = cabeceras[i];
             HSSFCell cell = headerRow.createCell(i);
            // cell.setCellStyle(headerStyle);
             cell.setCellValue(header);
         }
 
-        for (int i = 0; i < DATA.size(); ++i) {
+        for (int i = 0; i < data.size(); ++i) {
             HSSFRow dataRow = sheet.createRow(i + 1);
 
-            Object[] d = (Object[]) DATA.get(i);
-            String product = (String) d[0];
-            BigDecimal price = (BigDecimal) d[1];
-            String link = (String) d[2];
+            Excel d = (Excel) data.get(i);
 
-            dataRow.createCell(0).setCellValue(product);
-            dataRow.createCell(1).setCellValue(price.doubleValue());
-            dataRow.createCell(2).setCellValue(link);
+            String Fecha = (String) d.getFecha();
+            String Rut = (String) d.getRut();
+            String Docente = (String) d.getDocente();
+            String Sede = (String) d.getSede();
+            String Asignatura = (String) d.getAsignatura();
+            String Inicio = (String) d.getInicio();
+            String Termino = (String) d.getTermino();
+            String Horas = (String) d.getHoras();
+
+            dataRow.createCell(0).setCellValue(Fecha);
+            dataRow.createCell(1).setCellValue(Rut);
+            dataRow.createCell(2).setCellValue(Docente);
+            dataRow.createCell(3).setCellValue(Sede);
+            dataRow.createCell(4).setCellValue(Asignatura);
+            dataRow.createCell(5).setCellValue(Inicio);
+            dataRow.createCell(6).setCellValue(Termino);
+            dataRow.createCell(7).setCellValue(Horas);
         }
 
-        HSSFRow dataRow = sheet.createRow(1 + DATA.size());
+        HSSFRow dataRow = sheet.createRow(1 + data.size());
         HSSFCell total = dataRow.createCell(1);
         total.setCellType(CellType.FORMULA);
         //total.setCellStyle(style);
-        total.setCellFormula(String.format("SUM(B2:B%d)", 1 + DATA.size()));
+        total.setCellFormula(String.format("SUM(B2:B%d)", 1 + data.size()));
 
         FileOutputStream file = new FileOutputStream( dir+"/data.xls");
         workbook.write(file);
