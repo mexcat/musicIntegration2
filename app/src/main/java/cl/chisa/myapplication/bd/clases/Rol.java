@@ -11,6 +11,8 @@ public class Rol implements Parcelable {
         id = 0;
         desc_rol = "";
     }
+    @Override public String toString() { return this.desc_rol; }
+
 
     protected Rol(Parcel in) {
         if (in.readByte() == 0) {

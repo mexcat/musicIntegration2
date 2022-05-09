@@ -5,7 +5,9 @@ import android.util.Log;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 import cl.chisa.myapplication.bd.DBConnection;
 import cl.chisa.myapplication.bd.clases.Estado;
@@ -29,12 +31,8 @@ public class PersonaSql extends DBConnection {
                 persona.setRut_persona(rs.getString("rut_persona"));
                 persona.setDesc_email(rs.getString("desc_email"));
                 persona.setPassword("");
-                rol.setId(rs.getInt("id_rol"));
-                rol.setDesc_rol(rs.getString("desc_rol"));
-                persona.setRol(rol);
-                estado.setId(rs.getInt("id_estado"));
-                estado.setDesc_estado("desc_estado");
-                persona.setEstado(estado);
+                persona.setRol_id(rs.getInt("rol_id"));
+                persona.setEstado_id(rs.getInt("estado_id"));
             }
             rs.close();
             ConnexionMySQL.close();
@@ -61,12 +59,8 @@ public class PersonaSql extends DBConnection {
                 persona.setRut_persona(rs.getString("rut_persona"));
                 persona.setDesc_email(rs.getString("desc_email"));
                 persona.setPassword("");
-                rol.setId(rs.getInt("id_rol"));
-                rol.setDesc_rol(rs.getString("desc_rol"));
-                persona.setRol(rol);
-                estado.setId(rs.getInt("id_estado"));
-                estado.setDesc_estado("desc_estado");
-                persona.setEstado(estado);
+                persona.setRol_id(rs.getInt("rol_id"));
+                persona.setEstado_id(rs.getInt("estado_id"));
                 lista.add(persona);
             }
             rs.close();
@@ -78,29 +72,30 @@ public class PersonaSql extends DBConnection {
         return lista;
     }
 
-    public List<Persona> callAllProfesor() {
-        List<Persona> lista = null;
-        Persona persona = new Persona();
-        Estado estado = new Estado();
-        Rol rol = new Rol();
+    public Vector<Persona> callAllDocente() {
+        Vector<Persona> lista = new Vector<Persona>() {
+        } ;
         try {
             Connection ConnexionMySQL = CONN();
             Statement st = ConnexionMySQL.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * from persona where id_rol = ");
+            ResultSet rs = st.executeQuery("SELECT * from persona where rol_id = 4 and estado_id =1");
+
             while (rs.next()) {
+                Persona persona = new Persona();
+
+                Log.e("Rut", rs.getString("rut_persona"));
                 persona.setDesc_nombre(rs.getString("desc_nombre"));
                 persona.setDesc_paterno(rs.getString("desc_paterno"));
                 persona.setDesc_materno(rs.getString("desc_materno"));
                 persona.setRut_persona(rs.getString("rut_persona"));
                 persona.setDesc_email(rs.getString("desc_email"));
                 persona.setPassword("");
-                rol.setId(rs.getInt("id_rol"));
-                rol.setDesc_rol(rs.getString("desc_rol"));
-                persona.setRol(rol);
-                estado.setId(rs.getInt("id_estado"));
-                estado.setDesc_estado("desc_estado");
-                persona.setEstado(estado);
-                lista.add(persona);
+                persona.setEstado_id(1);
+                persona.setRol_id(4);
+                if(persona != null){
+                    lista.add(persona);
+                }
+
             }
             rs.close();
             ConnexionMySQL.close();
@@ -108,6 +103,7 @@ public class PersonaSql extends DBConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.e("lista", String.valueOf(lista.size()));
         return lista;
     }
 
@@ -117,7 +113,7 @@ public class PersonaSql extends DBConnection {
         try {
             Connection ConnexionMySQL = CONN();
             Statement st = ConnexionMySQL.createStatement();
-            ResultSet rs = st.executeQuery("Update persona set desc_nombre = '" + persona.getDesc_nombre() + "',desc_paterno = '" + persona.getDesc_paterno() + "',desc_materno = '" + persona.getDesc_materno() + "', desc_email = '" + persona.getDesc_email() + "', id_rol = '" + persona.getRol().getId() + "', id_estado = '" + persona.getEstado().getId() + "' where rut_persona = '" + persona.getRut_persona() + "'");
+            ResultSet rs = st.executeQuery("Update persona set desc_nombre = '" + persona.getDesc_nombre() + "',desc_paterno = '" + persona.getDesc_paterno() + "',desc_materno = '" + persona.getDesc_materno() + "', desc_email = '" + persona.getDesc_email() + "', id_rol = '" + persona.getRol_id() + "', id_estado = '" + persona.getEstado_id() + "' where rut_persona = '" + persona.getRut_persona() + "'");
             while (rs.next()) {
                 Log.e("ok", "ok");
             }
@@ -179,12 +175,8 @@ public class PersonaSql extends DBConnection {
                 persona.setRut_persona(rs.getString("rut_persona"));
                 persona.setDesc_email(rs.getString("desc_email"));
                 persona.setPassword("");
-                rol.setId(rs.getInt("id_rol"));
-                rol.setDesc_rol(rs.getString("desc_rol"));
-                persona.setRol(rol);
-                estado.setId(rs.getInt("id_estado"));
-                estado.setDesc_estado("desc_estado");
-                persona.setEstado(estado);
+                persona.setRol_id(rs.getInt("rol_id"));
+                persona.setEstado_id(rs.getInt("estado_id"));
                 lista.add(persona);
             }
             rs.close();

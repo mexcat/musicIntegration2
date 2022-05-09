@@ -2,6 +2,8 @@ package cl.chisa.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,22 +38,24 @@ public class LoginActivity extends DBConnection {
                 Thread thread = new Thread() {
                     @Override
                     public void run() {
-                        ConsultasSql consulta = new ConsultasSql();
-                        Persona mResult = consulta.login(ed1.getText().toString(), ed2.getText().toString());
-                        Log.e("Res rol", mResult.getRol().getDesc_rol());
-                        if (!mResult.getRut_persona().isEmpty()) {
-                            Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-                            i.putExtra("persona", mResult);
-                            i.putExtra("rol", mResult.getRol());
-                            i.putExtra("estado", mResult.getEstado());
-                            startActivity(i);
-                        }
+
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ConsultasSql consulta = new ConsultasSql();
+                                Persona mResult = consulta.login(ed1.getText().toString(), ed2.getText().toString());
+                                if (!mResult.getRut_persona().isEmpty()) {
+                                    Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                                    i.putExtra("persona", mResult);
+;                                   startActivity(i);
+                                }
+                            }
+                        });
                     }
                 };
                 thread.start();
             }
         });
-
     }
 
     public void DoOnThread() {

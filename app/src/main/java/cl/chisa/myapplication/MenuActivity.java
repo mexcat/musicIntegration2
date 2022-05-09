@@ -12,16 +12,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.List;
+
 import cl.chisa.myapplication.bd.DBConnection;
 import cl.chisa.myapplication.bd.clases.Estado;
 import cl.chisa.myapplication.bd.clases.Persona;
 import cl.chisa.myapplication.bd.clases.Rol;
+import cl.chisa.myapplication.bd.llamadas.ConsultasSql;
+import cl.chisa.myapplication.bd.llamadas.RolSql;
 import cl.chisa.myapplication.bd.utilidades.ToExcel;
 
 public class MenuActivity extends DBConnection {
     Persona persona;
-    Rol rol;
-    Estado estado;
     Application app;
     Button btn_actividades, btn_sedes, btn_asignaturas, btn_personas, btn_mis_datos, btn_salir;
 
@@ -38,11 +40,6 @@ public class MenuActivity extends DBConnection {
 
         app = (Application) getApplicationContext();
         persona = getIntent().getParcelableExtra("persona");
-        rol = getIntent().getParcelableExtra("rol");
-        estado = getIntent().getParcelableExtra("estado");
-
-        persona.setRol(rol);
-        persona.setEstado(estado);
 
         String[] strings = new String[2];
         strings[0] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -74,10 +71,8 @@ public class MenuActivity extends DBConnection {
             }
         });
 
-        //Log.e("rut", persona.getRut_persona());
-       // Rol rol = persona.getRol();
-        Log.e("rol??", rol.getId().toString());
-        switch (rol.getId()) {
+        Log.e("rol??", persona.getRol_id().toString());
+        switch (persona.getRol_id()) {
             case 0:
                 btn_actividades.setVisibility(View.GONE);
                 btn_sedes.setVisibility(View.VISIBLE);

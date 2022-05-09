@@ -5,23 +5,53 @@ import android.os.Parcelable;
 
 public class Asignatura implements Parcelable {
 
-    private Integer id_asignatura;
+    private Integer id;
     private String desc_asignatura;
-    private Estado estado;
+    private Integer estado_id;
 
-    public Asignatura() {
-        id_asignatura = 0;
+    public Asignatura(){
+        id= 0;
         desc_asignatura = "";
+        estado_id= 0;
+
     }
+
+    @Override public String toString() { return this.desc_asignatura; }
 
     protected Asignatura(Parcel in) {
         if (in.readByte() == 0) {
-            id_asignatura = null;
+            id = null;
         } else {
-            id_asignatura = in.readInt();
+            id = in.readInt();
         }
         desc_asignatura = in.readString();
-        estado = in.readParcelable(Estado.class.getClassLoader());
+        if (in.readByte() == 0) {
+            estado_id = null;
+        } else {
+            estado_id = in.readInt();
+        }
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(desc_asignatura);
+        if (estado_id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(estado_id);
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Asignatura> CREATOR = new Creator<Asignatura>() {
@@ -36,12 +66,12 @@ public class Asignatura implements Parcelable {
         }
     };
 
-    public Integer getId_asignatura() {
-        return id_asignatura;
+    public Integer getId() {
+        return id;
     }
 
-    public void setId_asignatura(Integer id_asignatura) {
-        this.id_asignatura = id_asignatura;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getDesc_asignatura() {
@@ -52,28 +82,15 @@ public class Asignatura implements Parcelable {
         this.desc_asignatura = desc_asignatura;
     }
 
-    public Estado getEstado() {
-        return estado;
+    public Integer getEstado_id() {
+        return estado_id;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void setEstado_id(Integer estado_id) {
+        this.estado_id = estado_id;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (id_asignatura == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(id_asignatura);
-        }
-        dest.writeString(desc_asignatura);
-        dest.writeParcelable(estado, flags);
+    public static Creator<Asignatura> getCREATOR() {
+        return CREATOR;
     }
 }

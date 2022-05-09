@@ -7,7 +7,7 @@
     android:visibility="visible">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/cl_principal"
+        android:id="@+id/cl_principal_actividad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
@@ -18,7 +18,7 @@
         tools:visibility="gone">
 
         <Button
-            android:id="@+id/btn_nuevo"
+            android:id="@+id/btn_nuevo_actividad"
             style="@style/Botones"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_titulo" />
 
         <Button
-            android:id="@+id/btn_exportar"
+            android:id="@+id/btn_exportar_actividad"
             style="@style/Botones"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/tv_titulo"
+            android:id="@+id/tv_titulo_actividad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
@@ -55,7 +55,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinner_actividad"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="32dp"
@@ -63,27 +63,27 @@
             android:layout_marginEnd="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_nuevo" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_nuevo_actividad" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_info"
+            android:id="@+id/rv_info_actividad"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_exportar"
+            app:layout_constraintBottom_toTopOf="@+id/btn_exportar_actividad"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_actividad"
             app:layout_constraintVertical_bias="0.0">
 
         </android.support.v7.widget.RecyclerView>
 
         <Button
-            android:id="@+id/btn_buscar"
+            android:id="@+id/btn_buscar_actividad"
             style="@style/Botones"
             android:layout_width="120dp"
             android:layout_height="0dp"
@@ -92,7 +92,7 @@
             android:text="BUSCAR"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_titulo" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_titulo_actividad" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -147,20 +147,22 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="16dp"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_guardar"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_guardar_actividad"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView5">
 
                     <Spinner
-                        android:id="@+id/sp_docentes"
+                        android:id="@+id/sp_docentes_actividad"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="40dp"
+                        android:gravity="center" />
 
                     <TextView
-                        android:id="@+id/tv_fecha"
+                        android:id="@+id/tv_fecha_actividad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="4dp"
                         android:text="Fecha de actividad"
@@ -168,9 +170,11 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/tv_hora_inicio"
+                        android:id="@+id/tv_hora_inicio_actividad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="4dp"
                         android:text="Hora inicio"
@@ -178,19 +182,32 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/tv_hora_termino"
+                        android:id="@+id/tv_hora_termino_actividad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="4dp"
                         android:text="Hora termino"
                         android:textColor="@android:color/black"
                         android:textSize="20sp" />
 
+                    <Spinner
+                        android:id="@+id/sp_sede_actividad"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center" />
+
+                    <Spinner
+                        android:id="@+id/sp_materia_actividad"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center" />
+
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btn_guardar"
+                    android:id="@+id/btn_guardar_actividad"
                     style="@style/Botones"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

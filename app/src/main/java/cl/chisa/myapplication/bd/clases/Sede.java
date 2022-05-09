@@ -4,21 +4,27 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Sede implements Parcelable {
-    private Integer id_sede;
+    private Integer id;
     private String desc_sede;
-    private Estado estado;
+    private Integer estado_id;
 
     public Sede() {
     }
 
+    @Override public String toString() { return this.desc_sede; }
+
     protected Sede(Parcel in) {
         if (in.readByte() == 0) {
-            id_sede = null;
+            id = null;
         } else {
-            id_sede = in.readInt();
+            id = in.readInt();
         }
         desc_sede = in.readString();
-        estado = in.readParcelable(Estado.class.getClassLoader());
+        if (in.readByte() == 0) {
+            estado_id = null;
+        } else {
+            estado_id = in.readInt();
+        }
     }
 
     public static final Creator<Sede> CREATOR = new Creator<Sede>() {
@@ -33,12 +39,34 @@ public class Sede implements Parcelable {
         }
     };
 
-    public Integer getId_sede() {
-        return id_sede;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setId_sede(Integer id_sede) {
-        this.id_sede = id_sede;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(desc_sede);
+        if (estado_id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(estado_id);
+        }
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getDesc_sede() {
@@ -49,28 +77,15 @@ public class Sede implements Parcelable {
         this.desc_sede = desc_sede;
     }
 
-    public Estado getEstado() {
-        return estado;
+    public Integer getEstado_id() {
+        return estado_id;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void setEstado_id(Integer estado_id) {
+        this.estado_id = estado_id;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (id_sede == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(id_sede);
-        }
-        dest.writeString(desc_sede);
-        dest.writeParcelable(estado, flags);
+    public static Creator<Sede> getCREATOR() {
+        return CREATOR;
     }
 }

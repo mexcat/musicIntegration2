@@ -29,15 +29,12 @@ public class ConsultasSql extends DBConnection {
                 persona.setDesc_email(rs.getString("desc_email"));
                 persona.setPassword("");
 
-                rol.setId(rs.getInt("id_rol"));
+                //persona.setRol_id(rs.getInt("rol_id"));
                 Log.e("id_rol_out", String.valueOf(rs.getInt("id_rol")));
                 Log.e("id_rol_in", String.valueOf(rol.getId()));
-                rol.setDesc_rol(rs.getString("desc_rol"));
-                persona.setRol(rol);
 
-                estado.setId(rs.getInt("id_estado"));
-                estado.setDesc_estado("desc_estado");
-                persona.setEstado(estado);
+                persona.setEstado_id(rs.getInt("estado_id"));
+
             }
             rs.close();
             ConnexionMySQL.close();
