@@ -71,7 +71,14 @@ public class MenuActivity extends DBConnection {
             }
         });
 
-        Log.e("rol??", persona.getRol_id().toString());
+        btn_salir.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent i2 = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i2);
+            }
+        });
+
         switch (persona.getRol_id()) {
             case 0:
                 btn_actividades.setVisibility(View.GONE);

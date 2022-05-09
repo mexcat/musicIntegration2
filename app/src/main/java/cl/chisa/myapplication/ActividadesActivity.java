@@ -6,7 +6,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,24 +21,20 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
+import cl.chisa.myapplication.adapter.ActividadAdapter;
 import cl.chisa.myapplication.bd.DBConnection;
 import cl.chisa.myapplication.bd.clases.Actividad;
+import cl.chisa.myapplication.bd.clases.ActividadConDetalle;
 import cl.chisa.myapplication.bd.clases.Asignatura;
 import cl.chisa.myapplication.bd.clases.Persona;
-import cl.chisa.myapplication.bd.clases.Rol;
 import cl.chisa.myapplication.bd.clases.Sede;
 import cl.chisa.myapplication.bd.llamadas.ActividadSql;
 import cl.chisa.myapplication.bd.llamadas.AsignaturaSql;
 import cl.chisa.myapplication.bd.llamadas.PersonaSql;
-import cl.chisa.myapplication.bd.llamadas.RolSql;
 import cl.chisa.myapplication.bd.llamadas.SedeSql;
 import cl.chisa.myapplication.bd.utilidades.Extras;
 
@@ -43,9 +42,11 @@ public class ActividadesActivity extends DBConnection {
     Button btn_nuevo, btn_exportar,btn_guardar;
     Spinner spinner, sp_docentes, sp_sede, sp_materia;
     RecyclerView rv_info;
-    EditText etv_nombre,etv_hora_inicio,etv_hora_termino, etv_sede, etv_materia, etv_fecha_inicio;
+    EditText etv_nombre,etv_hora_inicio,etv_hora_termino, etv_sede, etv_materia, etv_fecha_inicio, etv_search_actividad;
     TextView tv_fecha,tv_hora_inicio, tv_hora_termino;
     ConstraintLayout cl_principal,cl_add_actividad;
+    List<ActividadConDetalle> rvLista;
+
     private Actividad actividadAEnviar = new Actividad();
 
     boolean is24HView = true;
@@ -65,7 +66,7 @@ public class ActividadesActivity extends DBConnection {
 
         btn_exportar = findViewById(R.id.btn_exportar_actividad);
         btn_guardar = findViewById(R.id.btn_guardar_actividad);
-        spinner = findViewById(R.id.spinner_actividad);
+        //spinner = findViewById(R.id.spinner_actividad);
         sp_docentes  = findViewById(R.id.sp_docentes_actividad);
         sp_sede  = findViewById(R.id.sp_sede_actividad);
         sp_materia = findViewById(R.id.sp_materia_actividad);
@@ -83,10 +84,35 @@ public class ActividadesActivity extends DBConnection {
         cl_principal = findViewById(R.id.cl_principal_actividad);
         cl_add_actividad = findViewById(R.id.cl_add_actividad);
         btn_nuevo = findViewById(R.id.btn_nuevo_actividad);
+        etv_search_actividad = findViewById(R.id.etv_search_actividad);
         cl_principal.setVisibility(View.VISIBLE);
         cl_add_actividad.setVisibility(View.GONE);
         ActividadesActivity context = this;
 
+        ActividadSql consultaActividades = new ActividadSql();
+        Vector<ActividadConDetalle> actividadesConDetalles = consultaActividades.getAllActividadConDetalle();
+        rvLista = new Vector<ActividadConDetalle>();
+        actividadesConDetalles.forEach(actividadConDetalle -> rvLista.add(actividadConDetalle));
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_info_actividad);
+        ActividadAdapter adapter = new ActividadAdapter(actividadesConDetalles);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        etv_search_actividad.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e("str",String.valueOf(s));
+                adapter.getFilter().filter(String.valueOf(s));
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         PersonaSql consultaDocentes = new PersonaSql();
         Persona inicioPersona = new Persona();
@@ -103,13 +129,6 @@ public class ActividadesActivity extends DBConnection {
                     setAdapter(adapterDocente);
         }
 
-          /*  Persona docenteSelected = (Persona) ( (Spinner) sp_docentes ).getSelectedItem();
-            if(!docenteSelected.getRut_persona().equals("Seleccione profesor...")) {
-                actividadAEnviar.setPersona_rut_persona(docenteSelected.getRut_persona());
-                Log.e("docenteSelected.getRut_persona()", String.valueOf(docenteSelected.getRut_persona()));
-            }
-*/
-
         SedeSql consultaSede = new SedeSql();
         Sede inicioSede = new Sede();
         inicioSede.setDesc_sede("Seleccione sede...");
@@ -122,13 +141,6 @@ public class ActividadesActivity extends DBConnection {
                     android.R.layout.simple_spinner_item, listSede);
             sp_sede.setAdapter(adapterSede);
         }
-
-     /*   Sede sedeSelected = (Sede) ( (Spinner) sp_sede ).getSelectedItem();
-        if(!sedeSelected.getDesc_sede().equals("Seleccione sede...")) {
-            actividadAEnviar.setSede_id_sede(sedeSelected.getId());
-            Log.e("sedeSelected.getId()", String.valueOf(sedeSelected.getId()));
-        }
-*/
 
         AsignaturaSql consultaAsignatura = new AsignaturaSql();
         Asignatura inicioAsignatura = new Asignatura();
@@ -143,13 +155,6 @@ public class ActividadesActivity extends DBConnection {
             sp_materia.setAdapter(adapterAsignatura);
         }
 
-      /*  Asignatura asignaturaSelected = (Asignatura) ( (Spinner) sp_materia ).getSelectedItem();
-        if(!asignaturaSelected.getDesc_asignatura().equals("Seleccione asignatura...")) {
-            actividadAEnviar.setAsignatura_id_asignatura(asignaturaSelected.getId());
-            Log.e("asignaturaSelected.getId()", String.valueOf(asignaturaSelected.getId()));
-        }*/
-
-       // etv_fecha_inicio.setText(new SimpleDateFormat("dd/MM/yyyy").format(System.currentTimeMillis()));
         tv_fecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
