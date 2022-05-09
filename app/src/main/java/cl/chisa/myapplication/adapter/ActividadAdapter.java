@@ -1,6 +1,10 @@
 package cl.chisa.myapplication.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +14,23 @@ import android.widget.TextView;
 
 import java.util.Vector;
 
+import cl.chisa.myapplication.MenuActivity;
 import cl.chisa.myapplication.R;
+import cl.chisa.myapplication.bd.clases.Actividad;
 import cl.chisa.myapplication.bd.clases.ActividadConDetalle;
 
 public class ActividadAdapter extends RecyclerView.Adapter<ActividadAdapter.ViewHolder> implements Filterable {
     private Vector<ActividadConDetalle> listdata;
     private Vector<ActividadConDetalle> listdataFilter;
     private CustomFilter mFilter;
+    private Context contexto;
 
-    public ActividadAdapter(Vector<ActividadConDetalle> listdata) {
+    public ActividadAdapter(Vector<ActividadConDetalle> listdata, Context context) {
         this.listdata = listdata;
         this.listdataFilter = new Vector<>();
         this.listdataFilter.addAll(listdata);
         this.mFilter = new CustomFilter(ActividadAdapter.this);
+        this.contexto = context;
     }
 
     @Override
@@ -37,12 +45,15 @@ public class ActividadAdapter extends RecyclerView.Adapter<ActividadAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tv_nombre_detalle, tv_fecha_detalle, tv_asignatura_detalle, tv_sede_detalle;
+        public CardView cv;
         public ViewHolder(View itemView) {
             super(itemView);
             this.tv_nombre_detalle = (TextView) itemView.findViewById(R.id.tv_nombre_detalle);
             this.tv_fecha_detalle = (TextView) itemView.findViewById(R.id.tv_fecha_detalle);
             this.tv_asignatura_detalle = (TextView) itemView.findViewById(R.id.tv_asignatura_detalle);
             this.tv_sede_detalle = (TextView) itemView.findViewById(R.id.tv_sede_detalle);
+            this.cv = (CardView) itemView.findViewById(R.id.cv);
+
         }
     }
 
@@ -63,6 +74,23 @@ public class ActividadAdapter extends RecyclerView.Adapter<ActividadAdapter.View
         nombre  = String.valueOf(actividad.getPersona_nombre()) +" "+ String.valueOf(actividad.getPersona_paterno())+" "+String.valueOf(actividad.getPersona_materno());
         holder.tv_nombre_detalle.setText(String.valueOf(nombre));
         holder.tv_sede_detalle.setText(String.valueOf(actividad.getDesc_sede()));
+
+        holder.cv.setOnClickListener(v -> {
+            ActividadConDetalle actividadTemp = listdataFilter.get(position);
+            Actividad actSend = new Actividad();
+
+            actSend.setId(actividadTemp.getId());
+            actSend.setPersona_rut_persona(actividadTemp.getPersona_rut_persona());
+            actSend.setAsignatura_id_asignatura(actividadTemp.getAsignatura_id_asignatura());
+            actSend.setSede_id_sede(actividadTemp.getSede_id_sede());
+            actSend.setFecha_registro(actividadTemp.getFecha_registro());
+            actSend.setFecha_actividad(actividadTemp.getFecha_actividad());
+            actSend.setHoraini_actividad(actividadTemp.getHoraini_actividad());
+            actSend.setHorafin_actividad(actividadTemp.getHorafin_actividad());
+
+            MenuActivity menu = new MenuActivity();
+            menu.editar(actSend, contexto);
+        });
 
     }
 

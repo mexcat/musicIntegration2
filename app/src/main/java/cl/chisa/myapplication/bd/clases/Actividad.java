@@ -38,6 +38,7 @@ public class Actividad implements Parcelable {
             sede_id_sede = in.readInt();
         }
         fecha_registro = in.readString();
+        fecha_actividad = in.readString();
         horaini_actividad = in.readString();
         horafin_actividad = in.readString();
     }
@@ -81,6 +82,7 @@ public class Actividad implements Parcelable {
             dest.writeInt(sede_id_sede);
         }
         dest.writeString(fecha_registro);
+        dest.writeString(fecha_actividad);
         dest.writeString(horaini_actividad);
         dest.writeString(horafin_actividad);
     }

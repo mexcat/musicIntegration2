@@ -43,7 +43,7 @@ public class ActividadesActivity extends DBConnection {
     Spinner spinner, sp_docentes, sp_sede, sp_materia;
     RecyclerView rv_info;
     EditText etv_nombre,etv_hora_inicio,etv_hora_termino, etv_sede, etv_materia, etv_fecha_inicio, etv_search_actividad;
-    TextView tv_fecha,tv_hora_inicio, tv_hora_termino;
+    TextView tv_fecha,tv_hora_inicio, tv_hora_termino, tituloActividad;
     ConstraintLayout cl_principal,cl_add_actividad;
     List<ActividadConDetalle> rvLista;
 
@@ -85,17 +85,19 @@ public class ActividadesActivity extends DBConnection {
         cl_add_actividad = findViewById(R.id.cl_add_actividad);
         btn_nuevo = findViewById(R.id.btn_nuevo_actividad);
         etv_search_actividad = findViewById(R.id.etv_search_actividad);
+        tituloActividad = findViewById(R.id.textView5);
+
         cl_principal.setVisibility(View.VISIBLE);
         cl_add_actividad.setVisibility(View.GONE);
         ActividadesActivity context = this;
-
+        tituloActividad.setText("AGREGAR ACTIVIDAD");
         ActividadSql consultaActividades = new ActividadSql();
         Vector<ActividadConDetalle> actividadesConDetalles = consultaActividades.getAllActividadConDetalle();
         rvLista = new Vector<ActividadConDetalle>();
         actividadesConDetalles.forEach(actividadConDetalle -> rvLista.add(actividadConDetalle));
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_info_actividad);
-        ActividadAdapter adapter = new ActividadAdapter(actividadesConDetalles);
+        ActividadAdapter adapter = new ActividadAdapter(actividadesConDetalles, context);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -165,7 +167,7 @@ public class ActividadesActivity extends DBConnection {
                 final DatePickerDialog dateDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(final DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
                         tv_fecha.setText(dayOfMonth +"/"+(monthOfYear +1)+"/"+year);
-                        actividadAEnviar.setFecha_actividad(dayOfMonth +"/"+monthOfYear+"/"+year);
+                        actividadAEnviar.setFecha_actividad(dayOfMonth +"/"+(monthOfYear +1)+"/"+year);
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
                 dateDialog.getDatePicker().setMinDate(calMin.getTimeInMillis());
@@ -257,5 +259,91 @@ public class ActividadesActivity extends DBConnection {
                 }
             }
         });
+
+        if(getIntent().getParcelableExtra("actividad") != null){
+
+            Actividad aCambiar = getIntent().getParcelableExtra("actividad");
+            actividadAEnviar = aCambiar;
+
+            tituloActividad.setText("EDITAR ACTIVIDAD");
+            cl_principal.setVisibility(View.GONE);
+            cl_add_actividad.setVisibility(View.VISIBLE);
+            final Integer[] cDocente = {0};
+            final Integer[] pDocente = {0};
+            listDocente.forEach(persona ->{
+                if(persona.getRut_persona().equals(aCambiar.getPersona_rut_persona())){
+                    pDocente[0] = cDocente[0];
+                }
+                cDocente[0] = cDocente[0] +1;
+                });
+            sp_docentes.setSelection(pDocente[0]);
+            sp_docentes.setEnabled(false);
+
+            final Integer[] cSede = {0};
+            final Integer[] pSede = {0};
+            listSede.forEach(sede ->{
+                Integer x =0;
+                if(sede.getId()== null){
+                    x= -1;
+                }else{
+                    x = sede.getId();
+                }
+                if(x.equals(aCambiar.getSede_id_sede())){
+                    pSede[0] = cSede[0];
+                }
+                cSede[0] = cSede[0] +1;
+            });
+            sp_sede.setSelection(pSede[0]);
+            final Integer[] cMateria = {0};
+            final Integer[] pMateria = {0};
+            listAsignatura.forEach(materia ->{
+                if(materia.getId().equals(aCambiar.getAsignatura_id_asignatura())){
+                    pMateria[0] = cMateria[0];
+                }
+                cMateria[0] = cMateria[0] +1;
+            });
+            sp_materia.setSelection(pMateria[0]);
+            String[] split = String.valueOf(aCambiar.getFecha_actividad()).split("-");
+            String fecha = split[2]+"/"+split[1]+"/"+split[0];
+
+            tv_fecha.setText(fecha);
+            tv_hora_inicio.setText(aCambiar.getHoraini_actividad());
+            tv_hora_termino.setText(aCambiar.getHorafin_actividad());
+
+            btn_guardar.setText("ACTUALIZAR");
+            btn_guardar.setOnClickListener(v -> {
+                Extras extra = new Extras();
+
+                Persona docenteSelected = (Persona) ( (Spinner) sp_docentes ).getSelectedItem();
+                if(!docenteSelected.getRut_persona().equals("Seleccione profesor...")) {
+                    actividadAEnviar.setPersona_rut_persona(docenteSelected.getRut_persona());
+                }
+
+                Asignatura asignaturaSelected = (Asignatura) ( (Spinner) sp_materia ).getSelectedItem();
+                if(!asignaturaSelected.getDesc_asignatura().equals("Seleccione asignatura...")) {
+                    actividadAEnviar.setAsignatura_id_asignatura(asignaturaSelected.getId());
+                }
+                Sede sedeSelected = (Sede) ( (Spinner) sp_sede ).getSelectedItem();
+                if(!sedeSelected.getDesc_sede().equals("Seleccione sede...")) {
+                    actividadAEnviar.setSede_id_sede(sedeSelected.getId());
+                }
+
+                if (actividadAEnviar.getAsignatura_id_asignatura() != null
+                        && actividadAEnviar.getSede_id_sede() != null
+                        && actividadAEnviar.getPersona_rut_persona() != null
+                        && actividadAEnviar.getFecha_actividad() != null
+                        && actividadAEnviar.getHoraini_actividad() != null
+                        && actividadAEnviar.getHorafin_actividad() != null
+                ){
+                    ActividadSql actividad = new ActividadSql();
+                    actividad.updateActividad(actividadAEnviar);
+                    Toast.makeText(context,"Datos actualizados", Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(context,"Revise los datos ingresados", Toast.LENGTH_LONG).show();
+                }
+
+            });
+        }
     }
 }
